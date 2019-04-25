@@ -1,10 +1,10 @@
-
 import unittest
 import pynoid
 import re
 
+
 class PynoidTests(unittest.TestCase):
-    
+
     def setUp(self):
         pass
 
@@ -20,7 +20,7 @@ class PynoidTests(unittest.TestCase):
         for scheme in schemes:
             noid = pynoid.mint(scheme=scheme)
             self.assertTrue(noid.startswith(scheme))
-    
+
     def test_mint_short_term(self):
         noid = pynoid.mint()
         self.assertTrue(noid.startswith(pynoid.SHORT))
@@ -34,32 +34,37 @@ class PynoidTests(unittest.TestCase):
             self.assertEqual(pynoid.mint('e', n), pynoid.XDIGIT[n])
 
     def test_namespace_overflow(self):
-        self.assertRaises(pynoid.NamespaceError, pynoid.mint, template='d', n=10)
-        self.assertRaises(pynoid.NamespaceError, pynoid.mint, template='e', n=29)
+        self.assertRaises(pynoid.NamespaceError, pynoid.mint, template='d',
+                          n=10)
+        self.assertRaises(pynoid.NamespaceError, pynoid.mint, template='e',
+                          n=29)
 
     def test_mint_z_rollover(self):
-        self.assertEqual(pynoid.mint('zd', 10), '10')        
+        self.assertEqual(pynoid.mint('zd', 10), '10')
         self.assertEqual(pynoid.mint('ze', 29), '10')
 
     def test_validate_valid(self):
         valid = 'test31wqw0wsr'
-        validScheme = 'ark:/test31wqw0wsr'
+        valid_scheme = 'ark:/test31wqw0wsr'
         self.assertTrue(pynoid.validate(valid))
-        self.assertTrue(pynoid.validate(validScheme))
+        self.assertTrue(pynoid.validate(valid_scheme))
 
     def test_validate_invalid(self):
         invalid = 'test31qww0wsr'
-        invalidScheme = 'ark:/test31qww0wsr'
+        invalid_scheme = 'ark:/test31qww0wsr'
         self.assertRaises(pynoid.ValidationError, pynoid.validate, invalid)
-        self.assertRaises(pynoid.ValidationError, pynoid.validate, invalidScheme)
+        self.assertRaises(pynoid.ValidationError,
+                          pynoid.validate,
+                          invalid_scheme)
 
     def test_checkdigit(self):
         self.assertEqual(pynoid.mint('eek', 100), '3f0')
         self.assertRaises(pynoid.ValidationError, pynoid.validate, 'f30')
 
     def test_version(self):
-        self.assertTrue(re.match("pynoid \d.\d\Z", pynoid.version()))
+        v = pynoid.version()
+        self.assertTrue(re.match(r"pynoid \d.\d\Z", v))
+
 
 if __name__ == '__main__':
     unittest.main()
-        
