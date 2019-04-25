@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(name='pynoid',
-                 version='0.1',
+                 version='0.1.1',
                  description="A simple minter for opaque identifiers inspired "
                              "by California Digital Library's NOID.",
                  author='t. johnson',
